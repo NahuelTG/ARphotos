@@ -2,20 +2,12 @@
 import { useEffect, useRef } from "react";
 
 interface ARMarkerViewerProps {
-   modelUrl: string;
-   patternUrl?: string; // si no se da, usamos "hiro"
    scale?: string;
    position?: string;
    rotation?: string;
 }
 
-const ARMarkerViewer: React.FC<ARMarkerViewerProps> = ({
-   modelUrl,
-   patternUrl,
-   scale = "0.5 0.5 0.5",
-   position = "0 0 0",
-   rotation = "0 0 0",
-}) => {
+const ARMarkerViewer: React.FC<ARMarkerViewerProps> = ({ scale = "0.5 0.5 0.5", position = "0 0 0", rotation = "0 0 0" }) => {
    const sceneRef = useRef<HTMLDivElement>(null);
 
    useEffect(() => {
@@ -25,20 +17,18 @@ const ARMarkerViewer: React.FC<ARMarkerViewerProps> = ({
          scene.setAttribute("arjs", "sourceType: webcam; debugUIEnabled: false;");
 
          const marker = document.createElement("a-marker");
-         if (patternUrl) {
-            marker.setAttribute("type", "pattern");
-            marker.setAttribute("url", patternUrl);
-         } else {
-            marker.setAttribute("preset", "hiro");
-         }
+         marker.setAttribute("preset", "hiro");
 
-         const model = document.createElement("a-entity");
-         model.setAttribute("gltf-model", modelUrl);
-         model.setAttribute("scale", scale);
-         model.setAttribute("position", position);
-         model.setAttribute("rotation", rotation);
+         const box = document.createElement("a-box");
+         box.setAttribute("color", "red");
+         box.setAttribute("depth", "0.5");
+         box.setAttribute("height", "0.5");
+         box.setAttribute("width", "0.5");
+         box.setAttribute("position", position);
+         box.setAttribute("rotation", rotation);
+         box.setAttribute("scale", scale);
 
-         marker.appendChild(model);
+         marker.appendChild(box);
          scene.appendChild(marker);
 
          const camera = document.createElement("a-entity");
@@ -47,7 +37,7 @@ const ARMarkerViewer: React.FC<ARMarkerViewerProps> = ({
 
          sceneRef.current.appendChild(scene);
       }
-   }, [modelUrl, patternUrl, scale, position, rotation]);
+   }, [scale, position, rotation]);
 
    return <div ref={sceneRef} className="ar-marker-container" />;
 };

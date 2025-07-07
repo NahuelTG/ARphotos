@@ -1,16 +1,19 @@
+import { useState } from "react";
 import ARMarkerViewer from "./components/ARMarkerViewer";
 import "./App.css";
 
 function App() {
+   const [showAR, setShowAR] = useState(false);
+
    return (
       <div className="App">
-         <ARMarkerViewer
-            modelUrl="/models/bear.glb"
-            patternUrl="/patterns/bear.patt"
-            scale="0.5 0.5 0.5"
-            position="0 0 0"
-            rotation="0 180 0"
-         />
+         {!showAR ? (
+            <button className="start-ar-button" onClick={() => setShowAR(true)}>
+               Ingresar a experiencia AR
+            </button>
+         ) : (
+            <ARMarkerViewer position="0 0.25 0" rotation="0 0 0" scale="1 1 1" />
+         )}
       </div>
    );
 }
